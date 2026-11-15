@@ -24,3 +24,11 @@ jobs:
 
     - name: Run Tests
       run: pytest test_app.py
+
+      
+    - name: AI Analysis on Failure
+      if: failure()
+      run: python ai_analyzer.py
+      env:
+        GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
