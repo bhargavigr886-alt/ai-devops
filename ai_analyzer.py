@@ -28,7 +28,7 @@ headers = {
     "Content-Type": "application/json"
 }
 data = {
-    "model": "llama3-8b-8192",
+    "model": "llama-3.1-8b-instant",
     "messages": [
         {"role": "system", "content": "You are a Senior DevOps Engineer. Analyze this error log and explain how to fix it in 2 short sentences."},
         {"role": "user", "content": error_log}
