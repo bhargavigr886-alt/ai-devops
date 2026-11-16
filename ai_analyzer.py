@@ -6,7 +6,7 @@ import json
 groq_api_key = os.environ.get("GROQ_API_KEY")
 discord_webhook = os.environ.get("DISCORD_WEBHOOK_URL")
 
-# A sample error log from our failed test
+# The error log from our failed test
 error_log = """
 ============================= test session starts ==============================
 collected 3 items
@@ -21,7 +21,6 @@ FAILED test_app.py::test_divide_by_zero - ZeroDivisionError: division by zero
 """
 
 print("Sending logs to AI (Groq)...")
-# 1. Ask the AI (Groq)
 url = "https://api.groq.com/openai/v1/chat/completions"
 headers = {
     "Authorization": f"Bearer {groq_api_key}",
@@ -36,13 +35,21 @@ data = {
 }
 
 response = requests.post(url, headers=headers, json=data)
-ai_response = response.json()['choices'][0]['message']['content']
-print("AI Response received!")
 
-# 2. Send to Discord
-print("Sending AI analysis to Discord...")
-discord_data = {
-    "content": f"🚨 **Pipeline Failed!**\n\n**AI Analysis:**\n{ai_response}"
-}
-requests.post(discord_webhook, json=discord_data)
-print("Message sent to Discord successfully!")
+# THIS IS THE MOST IMPORTANT LINE: It will print exactly what Groq says
+print("API RESPONSE FROM GROQ:", response.text)
+
+try:
+    ai_response = response.json()['choices'][0]['message']['content']
+    print("AI Response received successfully!")
+    
+    # Send to Discord
+    print("Sending AI analysis to Discord...")
+    discord_data = {
+        "content": f"🚨 **Pipeline Failed!**\n\n**AI Analysis:**\n{ai_response}"
+    }
+    requests.post(discord_webhook, json=discord_data)
+    print("Message sent to Discord successfully!")
+
+except KeyError:
+    print("ERROR: The API key is likely invalid or expired. Please check your GitHub Secrets.")
