@@ -27,7 +27,7 @@ headers = {
     "Content-Type": "application/json"
 }
 data = {
-    "model": "llama-3.1-8b-instant",
+    "model": "openai/gpt-oss-20b",
     "messages": [
         {"role": "system", "content": "You are a Senior DevOps Engineer. Analyze this error log and explain how to fix it in 2 short sentences."},
         {"role": "user", "content": error_log}
